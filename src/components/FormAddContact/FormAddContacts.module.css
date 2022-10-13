@@ -1,0 +1,41 @@
+.formTitle {
+}
+.formItem {
+  display: flex;
+  align-items: center;
+}
+.formTitle {
+  margin: 0;
+  height: 100%;
+}
+.formInput {
+  border-radius: 12px;
+  padding: 6px;
+  margin: 10px;
+}
+.formInput:focus {
+  box-shadow: 0px 0px 6px rgba(0, 0, 255, 0.9);
+}
+.formButton {
+  border-radius: 12px;
+  border: 0.5px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 30px;
+  padding-right: 30px;
+  margin: 10px;
+
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  box-shadow: 0px 0px 3px rgba(0, 255, 0, 0.9);
+  background-color: white;
+}
+
+.formButton:hover,
+.formButton:focus {
+  scale: 1.2;
+  box-shadow: 0px 0px 8px rgba(0, 255, 0, 0.9);
+  background-color: rgba(145, 246, 145, 0.2);
+}
+.formButton:active {
+  background-color: greenyellow;
+}
