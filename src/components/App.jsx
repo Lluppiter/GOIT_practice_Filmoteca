@@ -1,26 +1,38 @@
 import { Component } from 'react';
-// import { nanoid } from 'nanoid';
-// import { Section } from './Section/Section';
-import movies from '../data/movies.json';
 import { MoviesGallery } from './Section/MoviesGallery/MoviesGallery';
 import { mapper } from './utils/Mapper';
 import { Modal } from './Modal/Modal';
+import { fetchApi } from './api/api';
+import { Button } from './Button/Button';
+import { Loader } from './Loader/Loader';
+import { Notification } from './Notification/Notification';
 
 export class App extends Component {
   state = {
-    movies: mapper(movies),
+    movies: [],
     currentImage: null,
+    page: 1,
+    isLoading: false,
+    error: null,
+    isShown: false,
   };
 
-  componentDidUpdate(_, prevState) {
-    if (this.state.movies !== prevState.movies) {
-      localStorage.setItem('movies', JSON.stringify(this.state.movies));
-    }
-  }
-  componentDidMount() {
-    const movies = localStorage.getItem('movies');
-    if (movies) {
-      this.setState({ movies: JSON.parse(movies) });
+  // componentDidUpdate(_, prevState) {
+  //   if (this.state.movies !== prevState.movies) {
+  //     localStorage.setItem('movies', JSON.stringify(this.state.movies));
+  //   }
+  // }
+  // componentDidMount() {
+  //   const movies = localStorage.getItem('movies');
+  //   if (movies) {
+  //     this.setState({ movies: JSON.parse(movies) });
+  //   }
+  // }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { isShown, page } = this.state;
+    if ((prevState.isShown !== isShown && isShown) || prevState.page !== page) {
+      this.fetchMovies();
     }
   }
 
@@ -37,15 +49,54 @@ export class App extends Component {
     this.setState({ currentImage: null });
   };
 
+  showFilms = () => {
+    this.setState({ isLoading: true });
+    if (this.state.isShown) {
+      this.setState({ movies: [] });
+    }
+    this.setState(prevState => ({ isShown: !prevState.isShown }));
+  };
+
+  fetchMovies = () => {
+    fetchApi(this.state.page)
+      .then(response =>
+        this.setState(prevState => ({
+          movies: [...prevState.movies, ...mapper(response.data.results)],
+        }))
+      )
+      .catch(error => {
+        this.setState({ error: error.message });
+      })
+      .finally(() => {
+        this.setState({ isLoading: false });
+      });
+  };
+  loadMore = () => {
+    this.setState(prevState => ({ page: prevState.page + 1 }));
+  };
+
   render() {
-    const { movies, currentImage } = this.state;
+    const { movies, currentImage, isShown, isLoading, error } = this.state;
     return (
       <>
-        <MoviesGallery
-          movies={movies}
-          deleteMovie={this.deleteMovie}
-          openModal={this.changeCurrentImage}
+        <Button
+          text={!isShown ? 'Show Films' : 'Hide Movies'}
+          handlerClick={this.showFilms}
         />
+        {isShown && (
+          <>
+            <MoviesGallery
+              movies={movies}
+              deleteMovie={this.deleteMovie}
+              openModal={this.changeCurrentImage}
+            />
+            {!isLoading && !error && (
+              <Button text="Load More" handlerClick={this.loadMore} />
+            )}
+            {isLoading && <Loader />}
+            {error && <Notification message={error} />}
+          </>
+        )}
         {currentImage && (
           <Modal image={currentImage} closeModal={this.closeModal} />
         )}
