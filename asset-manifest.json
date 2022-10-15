@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/goit_practice_filmoteca/static/css/main.3e007d79.css",
-    "main.js": "/goit_practice_filmoteca/static/js/main.a5c18f62.js",
+    "main.js": "/goit_practice_filmoteca/static/js/main.0cd280cf.js",
     "index.html": "/goit_practice_filmoteca/index.html",
     "main.3e007d79.css.map": "/goit_practice_filmoteca/static/css/main.3e007d79.css.map",
-    "main.a5c18f62.js.map": "/goit_practice_filmoteca/static/js/main.a5c18f62.js.map"
+    "main.0cd280cf.js.map": "/goit_practice_filmoteca/static/js/main.0cd280cf.js.map"
   },
   "entrypoints": [
     "static/css/main.3e007d79.css",
-    "static/js/main.a5c18f62.js"
+    "static/js/main.0cd280cf.js"
   ]
 }
